@@ -643,11 +643,7 @@ export const getTextFromRange = (range: Range, rejectTags: string[] = []): strin
     {
       acceptNode: (node) => {
         const parent = node.parentElement;
-        if (
-          parent &&
-          typeof parent.tagName === 'string' &&
-          rejectTags.includes(parent.tagName.toLowerCase())
-        ) {
+        if (rejectTags.includes(parent?.tagName.toLowerCase() || '')) {
           return NodeFilter.FILTER_REJECT;
         }
         return NodeFilter.FILTER_ACCEPT;
@@ -665,11 +661,7 @@ export const getTextFromRange = (range: Range, rejectTags: string[] = []): strin
   while ((node = walker.nextNode())) {
     if (node.nodeType === Node.TEXT_NODE) {
       text += (node as Text).nodeValue ?? '';
-    } else if (
-      node.nodeType === Node.ELEMENT_NODE &&
-      typeof (node as Element).tagName === 'string' &&
-      (node as Element).tagName.toUpperCase() === 'BR'
-    ) {
+    } else if ((node as Element).tagName === 'BR') {
       text += '\n';
     }
   }

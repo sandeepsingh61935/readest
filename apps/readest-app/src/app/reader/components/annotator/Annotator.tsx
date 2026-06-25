@@ -992,11 +992,13 @@ const Annotator: React.FC<{ bookKey: string; contentInsets: Insets }> = ({
     setShowDictionaryPopup(false);
   };
 
-  const handleCopy = (dismissPopup: boolean = true) => {
+  const handleCopy = (dismissPopup = true) => {
     if (!selection || !selection.text) return;
     const textToCopy = selection.text;
-    // Execute immediately to maintain transient user activation context
-    void writeTextToClipboard(textToCopy);
+    setTimeout(() => {
+      // Delay to ensure it won't be overridden by system clipboard actions
+      void writeTextToClipboard(textToCopy);
+    }, 100);
     if (dismissPopup) {
       handleDismissPopupAndSelection();
     }
